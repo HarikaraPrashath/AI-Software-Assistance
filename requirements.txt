@@ -1,0 +1,6 @@
+# Streamlit web framework
+streamlit==1.42.0
+
+# HTTP library to send data to and from the backend API
+requests==2.32.3
+python-dotenv>=1.0.0
