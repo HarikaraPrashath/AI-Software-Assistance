@@ -136,8 +136,22 @@ if user_input:
                         key=f"dl_current_{len(st.session_state.messages)}"
                     )
 
+            except requests.exceptions.RequestException as e:
+                status.update(label="❌ Connection Error", state="error")
+                error_details = str(e)
+                if hasattr(e, 'response') and e.response is not None:
+                    error_details += f"\n\n**Server Response:** {e.response.text}"
+                
+                bot_reply = (
+                    f"❌ **Could not connect to the backend.**\n\n"
+                    f"Please make sure your backend is successfully deployed and running at: `{BACKEND_URL}`.\n\n"
+                    f"**Detailed Error:**\n```text\n{error_details}\n```"
+                )
+                st.error(bot_reply)
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply})
             except Exception as e:
+                import traceback
                 status.update(label="❌ Error", state="error")
-                bot_reply = f"❌ Error: {e}"
+                bot_reply = f"❌ **Unexpected Error:**\n```python\n{traceback.format_exc()}\n```"
                 st.error(bot_reply)
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
