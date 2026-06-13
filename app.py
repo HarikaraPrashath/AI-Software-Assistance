@@ -96,9 +96,25 @@ if user_input:
                     import streamlit.components.v1 as components
                     b64 = base64.b64encode(zip_bytes).decode()
                     js_code = f"""
-                        <a id="auto_download" href="data:application/zip;base64,{b64}" download="{zip_filename}"></a>
                         <script>
-                            document.getElementById('auto_download').click();
+                            var b64 = "{b64}";
+                            var byteCharacters = atob(b64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {{
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }}
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], {{type: "application/zip"}});
+                            
+                            var url = window.URL.createObjectURL(blob);
+                            var a = document.createElement("a");
+                            a.href = url;
+                            a.download = "{zip_filename}";
+                            document.body.appendChild(a);
+                            a.click();
+                            
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(url);
                         </script>
                     """
                     components.html(js_code, height=0)
