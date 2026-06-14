@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
-st.set_page_config(page_title="AI Software Engineer", layout="wide")
-st.title("🤖 AI Software Engineer")
+st.set_page_config(page_title="Webina", layout="wide")
+st.title("Webina - AI Software Engineer")
 st.markdown("Describe the app you want built. The agent will plan, code, review, and zip it for you.")
 
 if "messages" not in st.session_state:
